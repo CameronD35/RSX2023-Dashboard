@@ -15,7 +15,7 @@ function JSONNode(data){
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index-singular.html');
 });
-
+//iuwhfkuhwfbkwufyge3
 app.post('/', (req, res) => {
     res.send('It works.');
     io.emit('pythonData', req.body.data)
