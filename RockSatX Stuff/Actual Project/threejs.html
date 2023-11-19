@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="#STL"></div>
+    <script src="/build/three.min.js"></script>
+    <script src="/examples/js/loaders/STLLoader.js"></script>
+    <script src="/examples/js/controls/OrbitControls.js"></script>
+
+    <script>
+        createSTLViewer('/Users/camiscool/Downloads/Eiffel_tower_sample.STL', '#STL', [250, 250])
+
+        function createSTLViewer(model, elementID, sizeArray){
+            d3.select(elementID).append('div').attr('id', 'STLViewer')
+            .attr('style', `width: ${sizeArray[0]}; height: ${sizeArray[1]}`);
+            let STL_Element = d3.select('#STLViewer');
+            let camera = new THREE.PerspectiveCamera(70, STL_Element.clientWidth/STL_Element.cleientHeight,
+            1, 1000)
+            let renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
+            renderer.setSize(STL_Element.clientWidth, STL_Element.cleientHeight);
+            STL_Element.appendChild(renderer.domElement);
+
+            let controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            constrols.rotateSpeed = 0.05;
+            controls.dampingFactor = 0.1;
+            controls.enableZoom = true;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = .75;
+
+            let scene = new THREE.Scene();
+            scene.add(new THREE.HemisphereLight(0xffffff, 1.5));
+
+            (new THREE.STLLoader()).load(model, (geometry) => {
+                let material = new THREE.MeshPhongMaterial({
+                    color: 0xff5533,
+                    specular: 100,
+                    shininess: 100 });
+                let mesh = new THREE.mesh(geometry, material);
+                    scene.add(mesh);
+
+                let middle = new THREE.Vector3();
+                geometry.computeBoundingBox();
+                geometry.boundingBox.getCenter(middle);
+                mesh.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(
+                -middle.x, -middle.y, -middle.z));
+
+                let largestDimension = Math.max(geometry.boundingBox.max.x, 
+                geometry.boundingBox.max.y, geometry.boundingBox.max.z)
+                camera.position.z = largestDimension * 1.5;
+
+                let animate = () => {
+                    requestAnimationFrame(animate);
+                    controls.update();
+                    renderer.render(scene, camera);
+                };
+
+                animate();
+            });
+        }
+    </script>
+</body>
+
+</html>
+

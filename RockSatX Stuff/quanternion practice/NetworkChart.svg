@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 27.5.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1"> <!-- xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 500 500" style="enable-background:new 0 0 500 500;" xml:space="preserve"> -->
+<style type="text/css">
+	.st0{opacity:0.5;fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;stroke-dasharray:2;}
+	.st1{opacity:0.5;}
+	.st2{fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;stroke-dasharray:2.0057,2.0057;}
+	.st4{fill:#FFFFFF;}
+	.st5{font-family:'Roboto-Black';}
+	.st6{font-size:16px;}
+</style>
+<line id="PD-EC2-2" class="st0" x1="395.11" y1="217.69" x2="351.11" y2="293.69"/>
+<line id="PD-EC2-1" class="st0" x1="390.11" y1="216.69" x2="347.11" y2="290.69"/>
+<line id="Base-EC1-2" class="st0" x1="105.5" y1="218" x2="149.5" y2="294"/>
+<line id="Base-EC1-1" class="st0" x1="110.5" y1="217" x2="153.5" y2="291"/>
+<g id="Base-EC2-2" class="st1">
+	<g>
+		<line class="st2" x1="126.61" y1="207.2" x2="127.46" y2="207.73"/>
+		<line class="st3" x1="129.15" y1="208.81" x2="293.93" y2="314.12"/>
+		<line class="st2" x1="294.77" y1="314.66" x2="295.61" y2="315.2"/>
+	</g>
+</g>
+<line id="Base-EC2-1" class="st0" x1="122.61" y1="211.2" x2="301.61" y2="327.2"/>
+<g id="PD-EC1-2" class="st1">
+	<g>
+		<line class="st2" x1="375.5" y1="209" x2="374.66" y2="209.54"/>
+		<line class="st3" x1="372.97" y1="210.62" x2="208.19" y2="315.92"/>
+		<line class="st2" x1="207.34" y1="316.46" x2="206.5" y2="317"/>
+	</g>
+</g>
+<line id="PD-EC1-1" class="st0" x1="379.5" y1="213" x2="200.5" y2="329"/>
+<line id="BASE-Re-2" class="st2" x1="133.5" y1="187" x2="227.5" y2="217"/>
+<line id="BASE-Re-1_00000163059749226686946690000001292694730800768929_" class="st2" x1="129.5" y1="202" x2="220.5" y2="226"/>
+<line id="PD-Re-1" class="st2" x1="367.25" y1="187.27" x2="273.25" y2="217.27"/>
+<line id="PD-Re-2" class="st2" x1="371.25" y1="202.27" x2="280.25" y2="226.27"/>
+<line id="EC1-Re-1" class="st2" x1="186.5" y1="284" x2="222.5" y2="258"/>
+<line id="EC1-Re-2" class="st2" x1="191.5" y1="286" x2="226.5" y2="263"/>
+<line id="EC2-Re-1" class="st2" x1="312.78" y1="284.27" x2="275.78" y2="260.27"/>
+<line id="EC2-Re-2" class="st2" x1="306.5" y1="288" x2="271.78" y2="266.27"/>
+<g>
+	<circle class="st4" cx="250.5" cy="241" r="33"/>
+	<path d="M250.5,208.5c17.92,0,32.5,14.58,32.5,32.5s-14.58,32.5-32.5,32.5S218,258.92,218,241S232.58,208.5,250.5,208.5
+		 M250.5,207.5c-18.5,0-33.5,15-33.5,33.5s15,33.5,33.5,33.5s33.5-15,33.5-33.5S269,207.5,250.5,207.5L250.5,207.5z"/>
+</g>
+<text transform="matrix(1 0 0 1 230.1929 245.5068)" class="st5 st6">Relay</text>
+<g>
+	<circle class="st4" cx="400" cy="186.5" r="33"/>
+	<path d="M400,154c17.92,0,32.5,14.58,32.5,32.5S417.92,219,400,219s-32.5-14.58-32.5-32.5S382.08,154,400,154 M400,153
+		c-18.5,0-33.5,15-33.5,33.5s15,33.5,33.5,33.5s33.5-15,33.5-33.5S418.5,153,400,153L400,153z"/>
+</g>
+<text transform="matrix(1 0 0 1 390.478 192.0068)" class="st5 st6">PD</text>
+<g>
+	<circle class="st4" cx="100" cy="186.5" r="33"/>
+	<path d="M100,154c17.92,0,32.5,14.58,32.5,32.5S117.92,219,100,219s-32.5-14.58-32.5-32.5S82.08,154,100,154 M100,153
+		c-18.5,0-33.5,15-33.5,33.5S81.5,220,100,220s33.5-15,33.5-33.5S118.5,153,100,153L100,153z"/>
+</g>
+<text transform="matrix(1 0 0 1 81.998 191.0078)" class="st5 st6">Base</text>
+<g>
+	<circle class="st4" cx="328" cy="313.5" r="33"/>
+	<path d="M328,281c17.92,0,32.5,14.58,32.5,32.5S345.92,346,328,346s-32.5-14.58-32.5-32.5S310.08,281,328,281 M328,280
+		c-18.5,0-33.5,15-33.5,33.5s15,33.5,33.5,33.5s33.5-15,33.5-33.5S346.5,280,328,280L328,280z"/>
+</g>
+<text transform="matrix(1 0 0 1 314.4976 319.0068)" class="st5 st6">EC2</text>
+<g>
+	<circle class="st4" cx="173" cy="313.5" r="33"/>
+	<path d="M173,281c17.92,0,32.5,14.58,32.5,32.5S190.92,346,173,346s-32.5-14.58-32.5-32.5S155.08,281,173,281 M173,280
+		c-18.5,0-33.5,15-33.5,33.5s15,33.5,33.5,33.5s33.5-15,33.5-33.5S191.5,280,173,280L173,280z"/>
+</g>
+<text transform="matrix(1 0 0 1 159.4976 319.0068)" class="st5 st6">EC1</text>
+</svg>

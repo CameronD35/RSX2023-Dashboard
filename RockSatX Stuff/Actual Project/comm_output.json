@@ -1,0 +1,51 @@
+
+{
+    "nodeNumber": 0,
+    "sub_head": {
+        "0": 0, 
+        "1": 0,
+        "2": 0
+    },
+
+    "quat" : {
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "w": 0
+    },
+    "alarm": {
+        "trx": 0,
+        "cocom": 0,
+        "gps": 0,
+        "temp": 0
+    },
+    "con_stat": {
+        "node1": 0,
+        "node2": 0,
+        "node3": 0,
+        "node4": 0,
+        "node5": 0
+    },
+    "master_conn": {
+        "2.4GHz": {
+            "SNR": {
+                "num": 0,
+                "color": 0
+            },
+            "RSSI": {
+                "num": 0,
+                "color": 0
+            }
+        },
+        "915MHz": {
+            "SNR": {
+                "num": 0,
+                "color": 0
+            },
+            "RSSI": {
+                "num": 0,
+                "color": 0
+            }
+        }
+    }
+}

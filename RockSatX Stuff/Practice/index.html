@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.typekit.net/sso8mms.css">
+    <title>Random Number Generator</title>
+    <style>
+        *{
+            font-family: 'Degular';
+        }
+        rect {
+            pointer-events: all;
+            fill-opacity: 0;
+            stroke-opacity: 0;
+            z-index: 1;
+        }
+
+        .tooltip {
+            position: absolute;
+            padding: 10px;
+            background-color: purple;
+            color: white;
+            border: 1px solid white;
+            border-radius: 10px;
+            display: none;
+            opacity: .75;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="data">Submit Upper Bound</h1>
+    <h2 id="dataParsed">Submit Upper Bound</h2>
+    <input type="textbox" id="numInput">
+    <button id="button" 
+    onclick="socket.emit('upperBound', 
+    document.getElementById('numInput').value)">
+    Submit Upper Bound</button>
+    <h4 style="font-style: italic;">*Lower Bound if number is negative (ex. -6)</h4>
+
+    <div id="container" class="svg-container" style="overflow-x: scroll; overflow-y: hidden;">
+        
+    </div>
+    <script src="/socket.io/socket.io.js"></script> <!-- Socket.io -->
+    <script src="https://d3js.org/d3.v7.min.js"></script> <!-- D3.js -->
+    <script> /* Actual JS */
+        let chartExistence = false;
+        let time = 0;
+        // index 0 - random numbers, index 1 - time
+        let allArray = [[], [0]];
+
+        let allArrayParsed = [{time: 0, number: 0}];
+
+        // --THE CHART--
+
+        // margins, width, height
+        function createChart(maxNum, dataArray, parsedDataArray) {
+            const margin = {top: 50, right: 20, bottom: 30, left: 20};
+            const width = 600 - margin.left - margin.right;
+            const height = 300 - margin.top - margin.bottom;
+
+            // x and y scales
+            const xscale = d3.scaleLinear().range([0, width])
+            .domain(d3.extent(dataArray[1]));
+
+            const yscale = d3.scaleLinear().range([height, 0])
+            .domain([0, maxNum]);
+
+            // SVG creation
+            const svg = d3.select('#container').append('svg').attr('id', 'chart')
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom).append('g')
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+            // Adding axes
+            svg.append('g')
+            .attr('transform', `translate(0, ${height})`)
+            .call(d3.axisBottom(xscale).ticks(5)
+            .tickFormat(parsedDataArray.forEach(element => {return element.time})));
+
+            svg.append('g').call(d3.axisLeft(yscale).ticks(1));
+
+            chartExistence = true;
+
+            // Line generation
+            let slice = d3.line()
+            .x(function(d) { return xscale(d.time);}) // apply the x scale to the x data
+            .y(function(d) { return yscale(d.number);})
+
+            // Adds the line to the svg to be displayed on the screen
+            svg.append('path').datum(parsedDataArray).attr('fill', 'none')
+            .attr('stroke', 'purple').attr('stroke-width', 1).attr('d', slice(parsedDataArray));
+
+            // Tooltip - shows data 
+            const tooltip = d3.select('#container').insert('div', 'svg').attr('class', 'tooltip')
+            .attr('id', 'tooltip');
+
+            // Circle - to be displayed on the tooltip
+            const circle = svg.append('circle').attr('r', 0).attr('fill', 'purple')
+            .style('stroke', 'white').attr('opacity', .70).style('pointer-events', 'none');
+
+            // This creates  a 'listening rectangle' in which tracks the closest data point
+            // to the mouses current position
+            const listeningRectangle = svg.append('rect').attr('width', width).attr('height', height);
+
+            listeningRectangle.on('mousemove', (event) => {
+                const [xCoord] = d3.pointer(event, this);
+                const bisectTime = d3.bisector((d) => d.time).left;
+                const x0 = xscale.invert(xCoord);
+                const i = bisectTime(parsedDataArray, x0, 1);
+                const d0 = parsedDataArray[i-1];
+                const d1 = parsedDataArray[i];
+
+                console.log(d0, d1);
+                if (d0 && d1){
+                    const d = x0 - d0.time > d1.time - x0 ? d1 : d0;
+                    const containerRect = document.getElementById('container').getBoundingClientRect();
+                    const xPos = xscale(d.time) + containerRect.left + margin.left;
+                    const yPos = yscale(d.number) + containerRect.top + margin.top;
+
+                    // Tells the computer where to place the circle in reference to the above
+                    // code
+
+                    circle.attr('cx', xPos - (containerRect.left + margin.left))
+                    .attr('cy', yPos - (containerRect.top + margin.top));
+
+
+                // Shows the circle
+                    circle.transition().duration(0).attr('r', 5);
+
+                    // Shows tooltip
+                    tooltip.style('display', 'block').style('left', `${xPos}px`)
+                    .style('top', `${yPos}px`)
+                    .html(`Number: ${(d.number).toString()} <br> Time: ${(d.time).toString()}s`);
+                }
+        }); 
+
+            listeningRectangle.on('mouseleave', () => {
+                circle.transition().duration(0).attr('r', 0);
+                
+                tooltip.style('display', 'none');
+            });
+
+
+        }
+
+
+
+
+        // Function that takes data and pushes it to the chart, thus updating it 
+        // Function that grabs the number from the input box and transmits it to the server
+        // when the button is clicked 
+        function grabElement(){
+            socket.emit('upperBound', 
+            document.getElementById('numInput').value);
+        }
+        var socket = io();
+        // Chart creation
+        // Recieves data from server and interprets it
+        // Also calls addData function and increments 'time variable'
+
+        socket.on('data', (JSONObject) => {
+            // This statement redraws the chart is one already exists
+            if(chartExistence){
+                document.getElementById('container').replaceChildren();
+                //document.getElementById('tooltip').remove();
+            }
+
+            // This pushes all new time and number data to the 
+            document.getElementById("data").textContent = 
+            (`JSON Object: ${JSONObject}`);
+            let numberData = JSON.parse(JSONObject).number
+            document.getElementById("dataParsed").textContent = 
+            (`Number: ${numberData}`);
+            allArrayParsed.push({time: ++time, number: numberData});
+            allArray[0].push(numberData); allArray[1].push(time);
+            createChart((JSON.parse(JSONObject).maxNumber), allArray, allArrayParsed);
+        });
+    </script>
+</html>

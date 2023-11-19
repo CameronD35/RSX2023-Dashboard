@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" 
+    rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" 
+    crossorigin="anonymous">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,900;1,400;1,500;1,900&display=swap" rel="stylesheet">
+    <title>Data Dashboard</title>
+    <style>
+        *{
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+        }
+
+        p:onhover{
+            cursor: default;
+        }
+
+        #relation-sec1, #relational-sec2 {
+            width: 25vw;
+        }
+
+        #network-visualizer {
+            width: 50vw;
+        }
+        .timer-container{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 100%;
+            margin: 0px;
+            vertical-align: middle;
+        }
+        #timerStartButton{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 150px;
+            height: 20px;
+            border: 1px solid black;
+            border-radius: 5px;
+        }
+
+        #timer{
+            font-size: 18px;
+            font-weight: 500;
+            margin: 0px 0px 0px 5px;
+        }
+
+        .eventBox{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            height: 20px;
+            border: 1px solid black;
+            border-radius: 5px;
+            margin: 10px 0px 0px 10px;
+        }
+
+        .eventLabel{
+            font-size: 12px;
+            font-weight: 400;
+            margin: 0px 0px 0px 0px;
+        }
+        
+        .event-container:nth-child(-n + 1){
+            margin: 5px 0px 0px 0px
+        }
+        .section-top{
+            border-right: solid black;
+            border-bottom: solid black;
+            border-width: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 40vh;
+        }
+        .section-bottom{
+            border-left: solid black;
+            border-width: 2px;
+            width: 20vw;
+            display: flex;
+            align-items: flex-start;
+            flex-direction: column;
+            height: 60vh;
+        }
+
+        .section-top:nth-last-child(-n + 1){
+            border-right: none;
+        }
+
+        .section-bottom:nth-child(-n + 1){
+            border: none;
+        }
+
+        .height40{
+            height: 40vh;
+        }
+
+        .section-title{
+            display: flex;
+            align-items: flex-start;
+            justify-content: left;
+            /* vertical-align: left; */
+            line-height: 100%;
+            margin: 5px 0px 0px 0px;
+        }
+
+        .title{
+            font-size: 14px;
+            font-weight: 900;
+            margin: 0px 0px 0px 0px;
+        }
+
+        .subtitle {
+            font-size: 10px;
+            font-weight: 500;
+            margin: 0px 0px 0px 0px;
+        }
+
+        .coords-title{
+            font-size: 10px;
+            font-style: italic;
+            font-weight: 500;
+            margin: 0px 0px 0px 0px;
+            align-items: left;
+        }
+
+        .node{
+            padding: 0px;
+            width: 100%;
+            height: 30%;
+            background-color: black;
+            margin: -20px 0px 0px 0px;
+        }
+        
+        .indicator-container{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: row;
+            margin: 3px 0px 3px 0px;
+        }
+        .indicator{
+            background-color: black;
+            height: 10px;
+            width: 10px;
+            border-radius: 20px;
+            margin: 3px 5px 3px 5px;
+            box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.25);
+        }
+
+        .indicator:hover{
+            box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+        }
+
+        .indicator:nth-child(-n + 1){
+            margin: 3px 5px 3px 0px;
+        }
+
+        .indicator-title{
+            margin: 0px 0px;
+            align-self: center;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        .indicator-container-small{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: row;
+            margin: -5px 0px
+        }
+
+
+        .indicator-small{
+            background-color: black;
+            height: 8px;
+            width: 8px;
+            border-radius: 20px;
+            margin: 0px 5px 0px 5px;
+        }
+
+        .indicator-title-small{
+            margin: 0px;
+            font-size: 8px;
+            align-self: center;
+            text-align: center;
+        }
+
+        .chart-svg{
+            font-size: 8px;
+        }
+
+        .table-titles{
+            font-size: 10px;
+            font-weight: 300;
+        }
+
+        #node-label-container1-indicator1, #node-label-container2-indicator1{
+            background-color: red;
+        }
+
+        #node-label-container1-indicator2, #node-label-container2-indicator2{
+            background-color: green;
+        }
+
+        #node-label-container1-indicator3, #node-label-container2-indicator3{
+            background-color: purple;
+        }
+
+        .networkNodes {
+            stroke: black;
+            stroke-width: 2;
+        }
+
+        .networkEdges{
+            stroke: black;
+            stroke-width: 2
+        }
+
+        .networkNodes text {
+            font-size: 8px;
+            font-weight: 300;
+        }
+
+        #networkNode-indicator0{
+            background-color: blue
+        }
+
+        #networkNode-indicator1{
+            background-color: #FFD700
+        }
+
+        #networkNode-indicator2{
+            background-color: green
+        }
+
+        #networkNode-indicator3{
+            background-color: red
+        }
+    </style>
+
+</head>
+<body id="body">
+    <div class="container-fluid text-center" id="top-section">
+        <div class="row" id="network-and-relation-graphs">
+            <div class="col-3 section-top height40" id="relational-sec1"></div>
+            <div class="col-6 section-top height40" id="network-visualizer"></div>
+            <div class="col-3 section-top height40" id="relational-sec2"></div>
+        </div>
+        <div class="row d-flex height40" id="capsule-data-columns">
+            <div class="col section-bottom align-middle" id="sec1"></div>
+            <div class="col section-bottom align-middle" id="sec2"></div>
+            <div class="col section-bottom align-middle" id="sec3"></div>
+            <div class="col section-bottom align-middle" id="sec4"></div>
+            <div class="col section-bottom align-middle" id="sec5"></div>
+        </div>
+    </div>
+
+
+
+    <script 
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" 
+    crossorigin="anonymous">
+    </script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script> <!-- Socket.io -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.9.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.9.0/vis.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.153.0/three.min.js"></script>
+   <!--  <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
+    <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script> -->
+
+    <!-- THREE.js -->
+    <!-- <script src="/build/three.min.js"></script>
+    <script src="/examples/js/loaders/STLLoader.js"></script>
+    <script src="/examples/js/controls/OrbitControls.js"></script> -->
+
+    <script>
+        
+        let runs = 0;
+        let missionTime = 755;
+        let startButtonClicked = false;
+        let currentText = 'Start Mission';
+        let currentColor = '#FFFFFF';
+        let eventsArray = [['GSE 1 (T-180)', -180, 336], ['TE-R (T+0)', 0, 336], ['TE-1 (T+190)', -190, 220], ['Internal (T+750)', -750, 760]];
+        // ALL 'element' OR 'elementIDString' parameters represent the HTML object of which to place the following code in
+        //let renders = [new THREE.WebGLRenderer(), new THREE.WebGLRenderer(), new THREE.WebGLRenderer(), new THREE.WebGLRenderer(), new THREE.WebGLRenderer()]
+        let dataset = {
+            nodes: [
+                {id: "EC1"},
+                {id: "EC2"},
+                {id: "Payload"},
+                {id: "Base"},
+                {id: "Relay"}
+            ],
+
+            edges: [] 
+        }
+
+        // Push all sources and targets to dataset.edges
+        for(let i = 0; i < 5; i++){
+            for(let j = 0; j < 5; j++){
+                if (i !== j){dataset.edges.push({source: dataset.nodes[i].id, target: dataset.nodes[j].id});}
+            }    
+        }
+        //console.log("edges:", dataset.edges);
+
+
+        let charts = 0;
+        let RSSI_SNR_Charts = 0;
+        let chartExistence = [];
+        for(let i = 0; i < 24; i++){
+            chartExistence.push(false);
+        }
+
+        let timeArray = [0, 0]
+
+        let allData = {
+                // Temperature Graph
+                temp: [[
+                ], [], [], []],
+                // Altitude Graph
+                alt: [[
+                ], [], [], []],
+                // Speed graph
+                speed: [[], [], [], []],
+                // TBD Graph
+                TBD: [[], [], [], []]
+        };
+
+        create_SNR_RSSI_DataKeys(5);
+
+        // This function creates the different sections which display different nodes
+        async function pageRender(amount, element, /* indicatorArray, nodesInfoArray, tableContentsArray, */ graphNodesArray, networkColorArray, obj){
+            if(document.getElementById('relational-sec1').hasChildNodes()){
+                document.getElementById('relational-sec1').replaceChildren();
+                document.getElementById('network-visualizer').replaceChildren();
+                document.getElementById('relational-sec2').replaceChildren();
+            }
+            // This creates the basic layout of the page, which consists of bottom and top rows
+            /* d3.select('body').append('div').attr('class', 'container-fluid text-center').attr('id', 'top-section')
+            .append('div').attr('class', 'row').attr('id', 'network-and-relation-graphs');
+            d3.select('div').append('div').attr('class', 'row d-flex height40').attr('id', 'capsule-data-columns');
+
+            // This adds all the dividers to the specified row and makes the website appear as if it is divided
+            // into seperate parts
+            d3.select('#network-and-relation-graphs').append('div').attr('class', 'col-3 section-top height40').attr('id', 'relational-sec1');
+            d3.select('#network-and-relation-graphs').append('div').attr('class', 'col-6 section-top height40').attr('id', 'network-visualizer'); */
+            //d3.select('#network-visualizer').append('p').attr('class', 'title').text('Network Visualizer');
+
+            // This section creates the network visualizer with its respective indicators
+            createVisualization('#network-visualizer', networkColorArray);
+            networkNodeIndicatorsArray = ['2.4GHz','915MHz', 'Both', 'None'];
+            d3.select(`#network-visualizer`).append('div').attr('class', 'indicator-container').attr('id', `networkNode-label-container`);
+            for(let i = 0; i < networkNodeIndicatorsArray.length; i++){
+                d3.select(`#networkNode-label-container`).append('div').attr('class', 'indicator').attr('id', `networkNode-indicator${i}`);
+                d3.select(`#networkNode-label-container`).append('p').text(networkNodeIndicatorsArray[i]).attr('class', 'indicator-title').style('id', `networkNode-indicator-text${i}`);
+            }
+            // End of visualizer creation
+            d3.select(`#network-visualizer`).append('br');
+            d3.select('#network-visualizer').append('div').attr('class', 'timer-container').attr('id', 'timer-container');
+            d3.select('#timer-container').append('div').attr('class', 'subtitle').attr('id', 'timerStartButton').style('background-color', currentColor);
+            document.getElementById('timerStartButton').addEventListener('click', () => {
+                if(!startButtonClicked){
+                    eventsArray[0][1] = 180;
+                    startButtonClicked = true;
+                    currentText = 'Restart Mission';
+                    currentColor =  'rgba(255, 0, 0, 0.5)';
+                } else {
+                    startButtonClicked = false;
+                    currentText = 'Start Mission';
+                    currentColor = '#FFFFFF';
+                    missionTime = -180;
+                    eventsArray = [['GSE 1 (T-180)', -180, 336], ['TE-R (T+00)', 0, 336], ['TE-1 (T+190)', -190, 410], ['Internal (T+750)', -750, 760]]; 
+                }
+            });
+            d3.select('#timerStartButton').append('p').attr('class', 'title').text(currentText).attr('id', 'buttonText');
+            d3.select('#timer-container').append('p').attr('id', 'timer').text(`| T${missionTime >= 0? `+${missionTime}` : missionTime}`);
+            if(startButtonClicked){
+                for(let i = 0; i <= 3; i++){
+                    console.log(eventsArray[2][1] + missionTime);
+                    //eventsArray[i][1]++;
+                }
+            }
+            d3.select('#network-visualizer').append('div').attr('class', 'timer-container').attr('id', 'event-container');
+            for(let i = 0; i <= 3; i++){
+                //console.log(missionTime + eventsArray[2][1]);
+                //if(startButtonClicked){++eventsArray[i][1];}
+                d3.select('#event-container').append('div').attr('class', 'eventBox').attr('id', `eventTimeDisplay-${i+1}`);
+                d3.select(`#eventTimeDisplay-${i+1}`).append('p').attr('class', 'eventLabel').text(eventsArray[i][0]);// | T${eventsArray[i][1]+missionTime > 0 ? `+${eventsArray[i][1]+missionTime}` : eventsArray[i][1]+missionTime}`);
+                if(missionTime + eventsArray[i][1] >= 0 && missionTime < eventsArray[i][2]){
+                    d3.select(`#eventTimeDisplay-${i+1}`).style('background-color', 'rgba(144, 238, 144, 0.5)');
+                } else if (missionTime + eventsArray[i][1] > -100 && missionTime < eventsArray[i][2]){
+                    d3.select(`#eventTimeDisplay-${i+1}`).style('background-color', 'rgba(255, 109, 10, 0.5)');
+                } else {
+                    d3.select(`#eventTimeDisplay-${i+1}`).style('background-color', 'rgba(255, 0, 0, 0.5)');
+                }
+            }
+            if(startButtonClicked){missionTime += obj.time;}
+
+
+            //d3.select('#network-and-relation-graphs').append('div').attr('class', 'col-3 section-top height40').attr('id', 'relational-sec2');
+
+            // Temperature
+            d3.select('#relational-sec1').append('p').attr('class', 'title').text('Temperature (F°)');
+            createChart(0, 3, ['purple', 'red', 'green'], 100, allData.temp, {top: 10, right: 40, bottom: 20, left: 40}, 
+            [250, 100], '#relational-sec1', 5, `chart-${++charts}`, 6, 100);
+
+            // Altitude
+            d3.select('#relational-sec1').append('p').attr('class', 'title').text('Altitude');
+            createChart(0, 3, ['purple', 'red', 'green'], 100, allData.alt, {top: 10, right: 40, bottom: 20, left: 40}, 
+            [250, 100], '#relational-sec1', 5, `chart-${++charts}`, 6, 10000);
+            
+            // Speed
+            d3.select('#relational-sec2').append('p').attr('class', 'title').text('Speed');
+            createChart(0, 3, ['purple', 'red', 'green'], 100, allData.speed, {top: 10, right: 40, bottom: 20, left: 40}, 
+            [250, 100], '#relational-sec2', 5, `chart-${++charts}`, 6, 200);
+
+            // TBD
+            d3.select('#relational-sec2').append('p').attr('class', 'title').text('TBD');
+            createChart(0, 3, ['purple', 'red', 'green'], 100, allData.TBD, {top: 10, right: 40, bottom: 20, left: 40}, 
+            [250, 100], '#relational-sec2', 5, `chart-${++charts}`, 6, 500);
+            
+            // This adds indicators to all the major graphs on the page
+            for(let i = 1; i <= 2; i++){
+                d3.select(`#relational-sec${i}`).append('div').attr('class', 'indicator-container').attr('id', `node-label-container${i}`);
+                for(let j = 1; j <= graphNodesArray.length; j++){
+                    d3.select(`#node-label-container${i}`).append('div').attr('class', 'indicator').attr('id', `node-label-container${i}-indicator${j}`);
+                    d3.select(`#node-label-container${i}`).append('p').text(graphNodesArray[j-1]).attr('class', 'indicator-title').attr('id', `node-label-container${i}-indicatortext${j}`);
+
+                }
+            }
+
+            // This section creates the node sections
+            /* for(let i = 1; i <= amount; i++){
+                d3.select(element).append('div').attr('class', 'col section-bottom align-middle').attr('id', `sec${i}`);
+            } */
+                runs++;
+                RSSI_SNR_Charts = 0;
+                charts = 0;
+        }
+        
+
+        // Chart Creation Function
+        function createChart(startLine, numOfLines, colorOfLinesArray, maxNum, parsedDataObject, 
+        marginObject, sizeArray, elementIDString, tickCount, nameOfChart, tickSize, yMax) {
+            let chartID = nameOfChart ?? `chart-${++charts}`;
+            chartExistence[charts-1] = true;
+            if(chartExistence[charts-1] && document.getElementById(chartID)){(document.getElementById(chartID)).remove()}
+            const margin = marginObject;
+            const width = sizeArray[0] - margin.left - margin.right;
+            const height = sizeArray[1] - margin.top - margin.bottom;
+
+            // x and y scales
+            xDomain = [((timeArray[1] >= 11)? timeArray[1]-10 : 0), timeArray[1]];
+            const xscale = d3.scaleLinear().range([0, width])
+            .domain(xDomain);
+
+            const yscale = d3.scaleLinear().range([height, 0])
+            .domain([0, yMax]);//((parsedDataArray[0][parsedDataArray[0].length-1]).number+5)]);
+            // SVG creation
+            const svg = d3.select(elementIDString).append('svg').attr('id', chartID)
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom).append('g')
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+            // Adding axes
+            svg.append('g')
+            .attr('transform', `translate(0, ${height})`).attr('class', 'chart-svg')
+            .call(d3.axisBottom(xscale).ticks(tickCount).tickSize(tickSize));
+
+            svg.append('g').attr('class', 'chart-svg').call(d3.axisLeft(yscale).ticks(1).tickSize(tickSize));
+
+            for(let i = startLine; i < startLine + numOfLines; i++){
+
+                let filteredData = parsedDataObject[i].filter(function(d) {
+                        return d.time >= xDomain[0] && d.time <= xDomain[1];
+                }); 
+
+                // Line generation
+                let filteredSlice = d3.line()
+                .x(function(d) { return xscale(d.time);}) // apply the x scale to the x data
+                .y(function(d) { return yscale(d.number);})
+                .defined(function(d) {return d.number !== null});
+                //console.log(allData.temp[0]);
+
+                // Adds the line to the svg to be displayed on the screen
+                svg.append('path').datum(filteredData).attr('fill', 'none')
+                .attr('stroke', colorOfLinesArray[i-startLine]).attr('stroke-opacity', '0.5').attr('stroke-width', 1).attr('d', filteredSlice);
+
+                // Adds a dot to each point on the graph
+                svg.selectAll(`.dot${i}`)
+                .data(filteredData.filter(function(d) {return d.number !== null}))
+                .enter().append('circle')
+                .attr('class', `dot${i}`)
+                .attr('cx', function(d) { return xscale(d.time); })
+                .attr('cy', function(d) { return yscale(d.number); })
+                .attr('r', 1)
+                .attr('fill', colorOfLinesArray[i-startLine]);
+            }
+        }
+        
+        // This is the function which creates a network graph and adds colors to them according to the JSON file transmitted in socket.on('data') function
+        function createVisualization(elementIDString, colorArray){
+            // create an array with nodes
+            let nodes = new vis.DataSet([
+                {id: 1, label: 'Relay', x: 200, y: 100},
+                {id: 2, label: 'PD', x: 300, y: 50},
+                {id: 3, label: 'EC1', x: 150, y: 150},
+                {id: 4, label: 'EC2', x: 250, y: 150},
+                {id: 5, label: 'Base', x: 100, y: 50}
+            ]);
+
+            // create an array with edges
+            let edges = new vis.DataSet([
+                {from: 1, to: 2, color: colorArray[0]},
+                {from: 1, to: 3, color: colorArray[1]},
+                {from: 1, to: 4, color: colorArray[2]},
+                {from: 1, to: 5, color: colorArray[3]},
+                {from: 5, to: 3, dashes: true, color: {color: colorArray[4], opacity: 0.5}},
+                {from: 5, to: 4, dashes: true, color: {color: colorArray[5], opacity: 0.5}},
+                {from: 2, to: 3, dashes: true, color: {color: colorArray[6], opacity: 0.5}},
+                {from: 2, to: 4, dashes: true, color: {color: colorArray[7], opacity: 0.5}}
+            ]);
+
+            // create a network
+            d3.select(elementIDString).append('div').attr('id', 'network-visualization');
+            let container = document.getElementById('network-visualization')
+            //console.log(container);
+            let data = {
+                nodes: nodes,
+                edges: edges
+            };
+            let width = 400;
+            let height = 200;
+            let options = {
+                width: width + 'px',
+                height: height + 'px',
+                nodes: {
+                    shape: 'circle',
+                    color: {
+                        border: '#000000',
+                        background: '#FFFFFF'    
+                    },
+                    font: '12px roboto black'
+                },
+                edges: {
+                    smooth: false
+                },
+                physics: false,
+                interaction: {
+                    dragNodes: false,// do not allow dragging nodes
+                    zoomView: false, // do not allow zooming
+                    dragView: false  // do not allow dragging
+                }
+            };
+            let network = new vis.Network(container, data, options);
+  
+// Set the coordinate system of Network such that it exactly
+// matches the actual pixels of the HTML canvas on screen
+// this must correspond with the width and height set for
+// the networks container element.
+            network.moveTo({
+                position: {x: 0, y: 0},
+                offset: {x: -width/2, y: -height/2},
+                scale: 1,
+            })
+        }
+        
+        
+        // !- IGNORE THIS FOR NOW -!
+        function createSTLViewer(model, elementID, sizeArray, renderVariable){
+
+            let scene = new THREE.Scene();
+
+            let camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+		    camera.position.z = 4;
+
+            const light = new THREE.SpotLight(0xffff00)
+            light.position.set(20, 20, 20)
+            light.color
+
+            scene.add(light)
+
+            // Create a renderer with Antialiasing
+            let currentRenderer = renders[renderVariable];
+
+           /*  const gl = currentRenderer.getContext();
+            const loseContextExtension = gl.getExtension('WEBGL_lose_context');
+            const maxContexts = loseContextExtension.maxContexts;
+            console.log("Maximum WebGL contexts:", maxContexts); */
+
+            // Configure renderer clear color
+            currentRenderer.setClearColor(0x000000);
+
+            // Configure renderer size
+            currentRenderer.setSize( 100, 100 );
+
+            // Append Renderer to DOM
+            document.getElementById(elementID).appendChild( currentRenderer.domElement );
+
+            let geometry = new THREE.BoxGeometry( 1, 1, 1 );
+            let material = new THREE.MeshPhysicalMaterial({
+                color: 0xffff00,
+                metalness: 0.25,
+                roughness: 0.1,
+                opacity: 1.0,
+                transparent: true,
+                transmission: 0.99,
+                clearcoat: 1.0,
+                clearcoatRoughness: 0.25
+            });
+            let cube = new THREE.Mesh( geometry, material );
+
+            // Add cube to Scene
+            scene.add( cube );
+
+            // Render Loop
+            let render = function () {
+                requestAnimationFrame( render );
+
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+
+                // Render the scene
+                currentRenderer.render(scene, camera);
+            };
+        }
+
+        var socket = io();
+
+        socket.on('pythonData', async (data) => {
+            console.log(data);
+            d3.select('#sampleData').text(data);
+        });
+        // Function to be carried out when the server sends data; this is the what makes the page work and update/rerender
+        socket.on('render', async (JSONObject) => {
+            let obj = JSON.parse(JSONObject);
+            runs = obj.runs;
+            for(let i = 1; i <= 4; i++){
+                pushData(allData.temp[i-1], obj[`temp${i}`]);
+                pushData(allData.alt[i-1], obj[`alt${i}`]);
+                pushData(allData.speed[i-1], obj[`speed${i}`]);
+                pushData(allData.TBD[i-1], obj[`TBD${i}`]);
+            }
+            //add_SNR_RSSI_Data(obj);
+
+
+            let networkColorArray = [
+                checkComms([obj.comms.relay.toPD['2.4GHz'], obj.comms.relay.toPD['915MHz']]),
+                checkComms([obj.comms.relay.toEC1['2.4GHz'], obj.comms.relay.toEC1['915MHz']]),
+                checkComms([obj.comms.relay.toEC2['2.4GHz'], obj.comms.relay.toEC2['915MHz']]),
+                checkComms([obj.comms.relay.toBase['2.4GHz'], obj.comms.relay.toBase['915MHz']]),
+                checkComms([obj.comms.base.toEC1['2.4GHz'], obj.comms.base.toEC1['915MHz']]),
+                checkComms([obj.comms.base.toEC2['2.4GHz'], obj.comms.base.toEC2['915MHz']]),
+                checkComms([obj.comms.PD.toEC1['2.4GHz'], obj.comms.PD.toEC1['915MHz']]),
+                checkComms([obj.comms.PD.toEC2['2.4GHz'], obj.comms.PD.toEC2['915MHz']])               
+            ]
+
+            pageRender(5, '#capsule-data-columns', /* ['TRX', 'COCOM', 'GPS', 'TEMP'], [
+                {mode: obj['1'].sub_head['0'], master: obj['1'].sub_head['1'], auxd: obj['1'].sub_head['2']},
+                {mode: obj['2'].sub_head['0'], master: obj['2'].sub_head['1'], auxd: obj['2'].sub_head['2']},
+                {mode: obj['3'].sub_head['0'], master: obj['3'].sub_head['1'], auxd: obj['3'].sub_head['2']},
+                {mode: obj['4'].sub_head['0'], master: obj['4'].sub_head['1'], auxd: obj['4'].sub_head['2']},
+                {mode: obj['5'].sub_head['0'], master: obj['5'].sub_head['1'], auxd: obj['5'].sub_head['2']},
+            ], [['', '2.4GHz', '915MHz'], ['SNR', 'RSSI', 'Temp', 'Alt', 'Speed', 'TBD']], */ ['EC1', 'EC2', 'Relay'], networkColorArray, obj);
+            //updateAllIndicators(obj);
+            timeArray[1] += obj.time;
+        });
+        
+        // function that simplifies the process of pushing items into an array/object
+        function pushData(recivingObject, pushObject){
+            recivingObject.push({time: timeArray[1], number: pushObject});
+        }
+        // Updates a specified indicator
+        function updateIndicator(parentDivID, numObject, objectID, colorObject){
+            if(parentDivID){d3.select(`#${parentDivID}`).text(numObject ? numObject + 'db' : 'N/A');};
+            d3.select(`#${objectID}`).style('background-color', (colorObject ?? 'black'));
+        }
+
+        // Creates data for bottom half of the page
+        function create_SNR_RSSI_DataKeys(amount){
+            for(let i = 1; i <= amount; i++){
+                for(let j = 1; j <= 4; j++){
+                    allData[`SNR_RSSI_Graph-node${i}-${j}`] = [[]];
+                }
+            }
+        }
+
+        /* function add_SNR_RSSI_Data(obj, amount, nodeNum){
+            let iter = 1;
+            let i = 1 + 4(nodeNum-1);
+            while(i <= 4 * amount){
+                pushData(allData[`SNR_RSSI_Graph${i}`][0], obj[`${iter}`].master_conn['2.4GHz'].SNR.num);
+                pushData(allData[`SNR_RSSI_Graph${i+1}`][0], obj[`${iter}`].master_conn['915MHz'].SNR.num);
+                pushData(allData[`SNR_RSSI_Graph${i+2}`][0], obj[`${iter}`].master_conn['2.4GHz'].RSSI.num);
+                pushData(allData[`SNR_RSSI_Graph${i+3}`][0], obj[`${iter}`].master_conn['915MHz'].RSSI.num);
+                iter++;
+                i += 4;
+            }
+        } */
+        
+        // Utilizes the 'updateIndicator' function to update all the indicators on the bottom half of the page
+        function updateAllIndicators(obj) {
+            for(let i = 1; i <= 5; i++){
+                // alarm indicators
+                updateIndicator(undefined, undefined, `TRX${i}`, obj[`${i}`].alarm.trx.color);
+                updateIndicator(undefined, undefined, `COCOM${i}`, obj[`${i}`].alarm.cocom.color);
+                updateIndicator(undefined, undefined, `GPS${i}`, obj[`${i}`].alarm.gps.color);
+                updateIndicator(undefined, undefined, `TEMP${i}`, obj[`${i}`].alarm.temp.color);
+               for(let j = 1; j <= 5; j++){
+                // con_stat indicators
+                updateIndicator(undefined, undefined, `sec${i}-N${j}`, obj[`${i}`].con_stat[`node${j}`].color);
+               } 
+            }
+
+            // db indicators
+            for(let i = 1; i <= 5; i++){
+                updateIndicator(`body${i}-row1-dbIndicator1`, (obj[`${i}`].master_conn['2.4GHz'].SNR.num), 
+                `table-container${i}-row1-indicator1`, (obj[`${i}`].master_conn['2.4GHz'].SNR.color));
+
+                updateIndicator(`body${i}-row1-dbIndicator2`, (obj[`${i}`].master_conn['915MHz'].SNR.num), 
+                `table-container${i}-row1-indicator2`, (obj[`${i}`].master_conn['915MHz'].SNR.color));
+
+                updateIndicator(`body${i}-row2-dbIndicator1`, (obj[`${i}`].master_conn['2.4GHz'].RSSI.num), 
+                `table-container${i}-row2-indicator1`, (obj[`${i}`].master_conn['2.4GHz'].RSSI.color));
+
+                updateIndicator(`body${i}-row2-dbIndicator2`, (obj[`${i}`].master_conn['915MHz'].RSSI.num), 
+                `table-container${i}-row2-indicator2`, (obj[`${i}`].master_conn['915MHz'].RSSI.color));
+            }
+        }    
+        
+        // Used in the 'createVisualization' function to simplify the process of converting boolean values to color strings
+        function checkComms(input) {
+            if (input[0] && input[1]){
+                return 'green';
+            } else if (input[0]){
+                return 'blue';
+            } else if (input[1]){
+                return '#FFD700';
+            } else {
+                return 'red';
+            }
+        }
+    
+        function clearRenderers() {
+            renders.forEach(renderer => {
+                renderer.dispose();
+            });
+            renders = [];
+        }
+        
+        socket.on('Node1Data', async (JSONObject) => {
+            let obj = JSON.parse(JSONObject);
+            //console.log('n1');
+            //console.log(obj);
+            updateNodeSection(1, ['TRX', 'COCOM', 'GPS', 'TEMP'], {mode: obj.sub_head['0'], master: obj.sub_head['1'], auxd: obj.sub_head['2']},
+            [['', '2.4GHz', '915MHz'], ['SNR', 'RSSI', 'Temp', 'Alt', 'Speed', 'TBD']], [obj.quat.x, obj.quat.y, obj.quat.z, obj.quat.w], obj);
+        });
+
+        socket.on('Node2Data', async (JSONObject) => {
+            let obj = JSON.parse(JSONObject);
+            //console.log('n2');
+            //console.log(obj);
+            updateNodeSection(2, ['TRX', 'COCOM', 'GPS', 'TEMP'], {mode: obj.sub_head['0'], master: obj.sub_head['1'], auxd: obj.sub_head['2']},
+            [['', '2.4GHz', '915MHz'], ['SNR', 'RSSI', 'Temp', 'Alt', 'Speed', 'TBD']], [obj.quat.x, obj.quat.y, obj.quat.z, obj.quat.w], obj);
+        });
+
+        socket.on('Node3Data', async (JSONObject) => {
+            let obj = JSON.parse(JSONObject);
+            updateNodeSection(3, ['TRX', 'COCOM', 'GPS', 'TEMP'], {mode: obj.sub_head['0'], master: obj.sub_head['1'], auxd: obj.sub_head['2']},
+            [['', '2.4GHz', '915MHz'], ['SNR', 'RSSI', 'Temp', 'Alt', 'Speed', 'TBD']], [obj.quat.x, obj.quat.y, obj.quat.z, obj.quat.w], obj);
+        });
+
+        socket.on('Node4Data', async (JSONObject) => {
+            let obj = JSON.parse(JSONObject);
+            updateNodeSection(4, ['TRX', 'COCOM', 'GPS', 'TEMP'], {mode: obj.sub_head['0'], master: obj.sub_head['1'], auxd: obj.sub_head['2']},
+            [['', '2.4GHz', '915MHz'], ['SNR', 'RSSI', 'Temp', 'Alt', 'Speed', 'TBD']], [obj.quat.x, obj.quat.y, obj.quat.z, obj.quat.w], obj);
+        });
+
+        socket.on('Node5Data', async (JSONObject) => {
+            let obj = JSON.parse(JSONObject);
+            updateNodeSection(5, ['TRX', 'COCOM', 'GPS', 'TEMP'], {mode: obj.sub_head['0'], master: obj.sub_head['1'], auxd: obj.sub_head['2']},
+            [['', '2.4GHz', '915MHz'], ['SNR', 'RSSI', 'Temp', 'Alt', 'Speed', 'TBD']], [obj.quat.x, obj.quat.y, obj.quat.z, obj.quat.w], obj);
+        });
+        socket.on('singularNodeData', async (JSONObject) => {
+            let obj = JSON.parse(JSONObject);
+            runs = obj.runs;
+            for(let i = 1; i <= 4; i++){
+                pushData(allData.temp[i-1], obj[`temp${i}`]);
+                pushData(allData.alt[i-1], obj[`alt${i}`]);
+                pushData(allData.speed[i-1], obj[`speed${i}`]);
+                pushData(allData.TBD[i-1], obj[`TBD${i}`]);
+            }
+
+            let networkColorArray = [
+                checkComms([obj.comms.relay.toPD['2.4GHz'], obj.comms.relay.toPD['915MHz']]),
+                checkComms([obj.comms.relay.toEC1['2.4GHz'], obj.comms.relay.toEC1['915MHz']]),
+                checkComms([obj.comms.relay.toEC2['2.4GHz'], obj.comms.relay.toEC2['915MHz']]),
+                checkComms([obj.comms.relay.toBase['2.4GHz'], obj.comms.relay.toBase['915MHz']]),
+                checkComms([obj.comms.base.toEC1['2.4GHz'], obj.comms.base.toEC1['915MHz']]),
+                checkComms([obj.comms.base.toEC2['2.4GHz'], obj.comms.base.toEC2['915MHz']]),
+                checkComms([obj.comms.PD.toEC1['2.4GHz'], obj.comms.PD.toEC1['915MHz']]),
+                checkComms([obj.comms.PD.toEC2['2.4GHz'], obj.comms.PD.toEC2['915MHz']])               
+            ]
+
+            pageRender(5, '#capsule-data-columns', ['EC1', 'EC2', 'Relay'], networkColorArray);
+
+            updateNodeSection(1, ['TRX', 'COCOM', 'GPS', 'TEMP'], {mode: obj.sub_head['0'], master: obj.sub_head['1'], auxd: obj.sub_head['2']},
+            [['', '2.4GHz', '915MHz'], ['SNR', 'RSSI', 'Temp', 'Alt', 'Speed', 'TBD']]);
+
+            updateNodeSection(2, ['TRX', 'COCOM', 'GPS', 'TEMP'], {mode: obj.sub_head['0'], master: obj.sub_head['1'], auxd: obj.sub_head['2']},
+            [['', '2.4GHz', '915MHz'], ['SNR', 'RSSI', 'Temp', 'Alt', 'Speed', 'TBD']]);
+            timeArray[1] += obj.time;
+
+        });
+
+        // i is the number of the node
+        function updateNodeSection(i, indicatorArray, nodesInfoArray, tableContentsArray, coords, obj){
+                if(document.getElementById(`sec${i}`).hasChildNodes()){
+                    document.getElementById(`sec${i}`).replaceChildren();
+                }
+                let alarmColorArray = [obj.alarm.trx.color, obj.alarm.cocom.color, obj.alarm.gps.color, obj.alarm.temp.color];
+                let con_statColorArray = [obj.con_stat.node1.color, obj.con_stat.node2.color, obj.con_stat.node3.color, obj.con_stat.node4.color, obj.con_stat.node5.color];
+                
+                let dbNums = [obj.master_conn[`2.4GHz`].SNR.num, obj.master_conn[`2.4GHz`].RSSI.num, obj.master_conn[`915MHz`].SNR.num, obj.master_conn[`915MHz`].RSSI.num];
+
+                pushData(allData[`SNR_RSSI_Graph-node${i}-1`][0], obj.master_conn['2.4GHz'].SNR.num);
+                pushData(allData[`SNR_RSSI_Graph-node${i}-2`][0], obj.master_conn['915MHz'].SNR.num);
+                pushData(allData[`SNR_RSSI_Graph-node${i}-3`][0], obj.master_conn['2.4GHz'].RSSI.num);
+                pushData(allData[`SNR_RSSI_Graph-node${i}-4`][0], obj.master_conn['915MHz'].RSSI.num);
+
+
+                d3.select(`#sec${i}`).append('div').attr('id', `sec${i}-title`).attr('class', 'section-title');
+
+                d3.select(`#sec${i}-title`).append('p').attr('class', 'title').text(`Node ${i} | `);
+                d3.select(`#sec${i}-title`).append('p').attr('class', 'subtitle').text(`(${nodesInfoArray.mode ?? 'N/A' }-${nodesInfoArray.master ?? 'N/A'}-${nodesInfoArray.auxd ?? 'N/A'})`).attr('style', 'margin: 0px 0px 0px 3px;');
+                //if(i === 1){
+                    d3.select(`#sec${i}`).append('p').attr('id', `coords-${i}`).text('N/A').attr('class', 'coords-title');
+                //} else {
+                    //d3.select(`#sec${i}`).append('p').attr('id', `coords-${i}`).text('N/A').attr('class', 'coords-title');
+                //}
+                // This section adds the 3D display along with the divs used for all indicators
+                //d3.select(`#sec${i}`).append('br');
+                 /* if(i !== 5){
+                    createSTLViewer(null, `sec${i}`, null, i-1);
+                } */
+                d3.select(`#sec${i}`).append('div').attr('class', 'indicator-container').attr('id', `indicator-container${i}-row1`);
+                d3.select(`#sec${i}`).append('div').attr('class', 'indicator-container').attr('id', `indicator-container${i}-row2`);
+
+                // This adds all the indicators according to the array argument passed in 'indicatorArray' and the integer argument passed in 'amount'
+                let currentContainer_row1 = d3.select(`#indicator-container${i}-row1`);
+                let currentContainer_row2 = d3.select(`#indicator-container${i}-row2`);
+                for(let j = 0; j < indicatorArray.length; j++){
+                   currentContainer_row1.append('div').attr('class', `indicator`).attr('id', `${indicatorArray[j]+i}`).style('background-color', `${alarmColorArray[j] ?? 'black'}`);
+                   currentContainer_row1.append('p').attr('class', `indicator-title`).text(indicatorArray[j]);
+                }
+                for(let j = 1; j <= 5; j++){
+                    currentContainer_row2.append('div').attr('class', `indicator`).attr('id', `sec${i}-N${j}`).style('background-color', `${con_statColorArray[j-1] ?? 'black'}`);
+                    currentContainer_row2.append('p').attr('class', `indicator-title`).text(`N${j}`)
+                }
+
+                // This section creates the tables across all node sections
+                d3.select(`#sec${i}`).append('table').attr('class', 'table table-bordered border-dark').attr('id', `table-${i}`);
+                d3.select(`#table-${i}`).append('thead').attr('id', `tablehead-${i}`);
+                d3.select(`#table-${i}`).append('tbody').attr('id', `tablebody-${i}`);
+                d3.select(`#tablehead-${i}`).append('tr').attr('id', `th-tablerow${i}`);
+                let currentTableHead = d3.select(`#tablehead-${i}`);
+
+                // This creates the tables horizontal titles
+                const currentTableHeadRow = currentTableHead.append('tr');
+                for(let j = 0; j < tableContentsArray[0].length; j++){
+                   currentTableHeadRow.append('th').attr('scope', 'col').text(tableContentsArray[0][j]).attr('class', 'table-titles');
+                }
+                let chartNum = 0;
+                let dataCharts = 0;
+                // This creates the vertical titles and the content in the middle 
+                for(let j = 1; j <= tableContentsArray[1].length; j++){
+                    let graphValues = [100, 10000, 200, 500]
+                    let graphColors = ['red', 'green', 'purple', 'blue']
+                    d3.select(`#tablebody-${i}`).append('tr').attr('id', `tablebody${i}-row${j}`);
+                    if(!(i === 5 && j >= 3)){d3.select(`#tablebody${i}-row${j}`).append('th').attr('scope', 'row').attr('id', `#tablebody${i}-row${j}-th${j}`).text(tableContentsArray[1][j-1]).attr('class', 'table-titles');}
+                    for(let k = 1; k <= tableContentsArray[1].length; k++){
+                        if((k <= 2) && (j <= 2)){
+                            d3.select(`#tablebody${i}-row${j}`).append('td').attr('id', `tablebody${i}-row${j}-td${k}`);
+                            d3.select(`#tablebody${i}-row${j}-td${k}`).append('div').attr('class', 'indicator-container-small').attr('id', `table-container${i}-row${j}-td${k}`);
+                            d3.select(`#table-container${i}-row${j}-td${k}`).append('div').attr('class', 'indicator-small').attr('id', `table-container${i}-row${j}-indicator${k}` );
+                            d3.select(`#table-container${i}-row${j}-td${k}`).append('p').attr('id', `body${i}-row${j}-dbIndicator${k}`).attr('class', 'indicator-title-small').text(`${dbNums[chartNum]}dB`);
+                            createChart(0, 1, ['purple'], 100, allData[`SNR_RSSI_Graph-node${i}-${++chartNum}`], {top: 10, right: 5, bottom: 15, left: 25}, [65, 40], 
+                            `#tablebody${i}-row${j}-td${k}`, 1, `node${i}-chart-${chartNum}`, 3, 100);
+                        }
+                        
+                        
+                    }
+                    if (j >= 3 && i <= 4){
+                        //console.log(Object.values(allData)[j-3][i-1]);
+                        //console.log(Object.values(allData)[j-3]);
+                        d3.select(`#tablebody${i}-row${j}`).append('td').attr('id', `tablebody${i}-row${j}-td1`).attr('colspan', '2');
+                            createChart(i-1, 1, [graphColors[i-1]], 100, Object.values(allData)[j-3], {top: 10, right: 5, bottom: 15, left: 30}, [180, 40], 
+                            `#tablebody${i}-row${j}-td1`, 2, `node${i}-dataChart${++dataCharts}`, 3, graphValues[j-3]);
+                    }
+                }
+
+                d3.select(`#coords-${i}`).text(`Coordinates | x: ${coords[0] ?? 'N/A'}, y: ${coords[1]  ?? 'N/A'}, z: ${coords[2]  ?? 'N/A'}, w: ${coords[3]  ?? 'N/A'}`)
+        }
+    </script>
+</body>
+</html>
